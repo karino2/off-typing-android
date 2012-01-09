@@ -37,6 +37,7 @@ public class OffTypingActivity extends Activity {
 					int arg3) {
 			}});
         
+        
         findStartButton().setOnClickListener(new OnClickListener(){
 			public void onClick(View arg0) {
 				handleStart();
@@ -76,7 +77,8 @@ public class OffTypingActivity extends Activity {
 		isRunning = false;
         findStartButton().setEnabled(true);
         long endTime = System.currentTimeMillis();
-		findTV(R.id.textViewResult).setText("Finish! total ch:" + tg.getTotalCharacterNum() + ", time=" + String.valueOf((int)(endTime - beginTime)/1000));	
+        double minute = (endTime - beginTime)/(1000*60.0);
+		findTV(R.id.textViewResult).setText("•ª‘¬" +  (int)(tg.getTotalCharacterNum()/minute) + " •¶Žš ");
 	}
 
 	private void handleStart() {

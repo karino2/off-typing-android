@@ -6,6 +6,7 @@ import java.util.Random;
 public class TextGenerater {
 	ArrayList<String> texts;
 	int currentIndex;
+	int oneGameSize = 15;
 	public TextGenerater()
 	{
 		initializeTexts();
@@ -16,12 +17,14 @@ public class TextGenerater {
 	private void initializeTexts() {
 		texts = new ArrayList<String>();
 		String[] arr = new String[]{
-				"いまのところ",
-				"てきすとは",
-				"すべてはーどこーどでございます",
+				"いまのところ","てきすとは","はーどこーど","でございます。",
 				"ごぎょう", "はこべら", "ほとけのざ", "なずな", "すずな", "すずしろ", "せり",
-				"このごろは、", "だいぶあたたかくなってきた。", "ふりっくにゅうりょくのはやさは", "がんばってれんしゅうします。",
-				"けいたいでんわ", "りょうてでふりっく", "それなりにはやい", "あんどろいどのおかげ"
+				"このごろは、", "だいぶ", "あたたかくなってきた。", "ふりっくにゅうりょく", "はやぶさくん", "がんばって", "れんしゅうします。",
+				"けいたいでんわ", "りょうてでふりっく", "それなりにはやい", "あんどろいどの", "おかげ",
+				"しょうかん", "たいかん", "りっしゅん", "うすい", "けいちつ", "しゅんぶん","せいめい","げし",
+				"なーんだ", "ただの", "みずたまり", "じゃないか",
+				"べんきょう", "するのが", "そんなに", "えらいわけ？"
+				
 		};
 		for(String st : arr)
 		{
@@ -60,7 +63,7 @@ public class TextGenerater {
 	
 	public String getAt(int i)
 	{
-		if(i < texts.size())
+		if(i < oneGameSize)
 			return texts.get(i);
 		return "";
 	}
@@ -74,8 +77,8 @@ public class TextGenerater {
 	public int getTotalCharacterNum()
 	{
 		int sum = 0;
-		for(String st: texts)
-		{
+		for(int i = 0; i < oneGameSize; i++){
+			String st = texts.get(i);
 			sum += st.length();
 		}
 		return sum;
@@ -89,6 +92,6 @@ public class TextGenerater {
 	
 	public boolean isFinished()
 	{
-		return currentIndex >= texts.size();
+		return currentIndex >= oneGameSize;
 	}
 }
