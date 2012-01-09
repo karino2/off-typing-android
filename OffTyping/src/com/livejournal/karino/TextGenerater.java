@@ -65,6 +65,22 @@ public class TextGenerater {
 		return "";
 	}
 	
+	public void reset()
+	{
+		shuffle();
+		currentIndex = 0;
+	}
+	
+	public int getTotalCharacterNum()
+	{
+		int sum = 0;
+		for(String st: texts)
+		{
+			sum += st.length();
+		}
+		return sum;
+	}
+	
 	public void moveNext()
 	{
 		if(!isFinished())

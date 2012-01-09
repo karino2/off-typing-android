@@ -4,24 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class OffTypingActivity extends Activity {
-    /** Called when the activity is first created. */
+	
+	TextGenerater tg;
+	long beginTime;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        tg = new TextGenerater();
+        
         EditText et = (EditText)findViewById(R.id.editTextInput);
         et.addTextChangedListener(new TextWatcher(){
 
 			public void afterTextChanged(Editable arg0) {
-				String current = arg0.toString();
-		        findTV(R.id.textViewDebug).setText(current);
-		        if("いまはこれをにゅうりょく。".equals(current))
-		        	((EditText)findViewById(R.id.editTextInput)).setText("");
+				if(isRunning)
+					handleInput(arg0.toString());
 			}
 
 			public void beforeTextChanged(CharSequence arg0, int arg1,
@@ -32,13 +37,54 @@ public class OffTypingActivity extends Activity {
 					int arg3) {
 			}});
         
-        findTV(R.id.textViewCurrent).setText("いまはこれをにゅうりょく。");
-        findTV(R.id.textViewNext).setText("つぎはこれをにゅうりょく。");
-        findTV(R.id.textViewAfterNext).setText("そのつぎはこれをにゅうりょく。");
+        findStartButton().setOnClickListener(new OnClickListener(){
+			public void onClick(View arg0) {
+				handleStart();
+			}});
+        
         
     }
 
+	private Button findStartButton() {
+		return (Button)findViewById(R.id.buttonStart);
+	}
+    boolean isRunning = false;
+
+	private void setTextToView() {
+		findTV(R.id.textViewCurrent).setText(tg.getCurrent());
+        findTV(R.id.textViewNext).setText(tg.getNext());
+        findTV(R.id.textViewAfterNext).setText(tg.getAfterNext());
+	}
+
 	private TextView findTV(int id) {
 		return (TextView)findViewById(id);
+	}
+
+	private void handleInput(String current) {
+		// findTV(R.id.textViewResult).setText(current);
+		if(tg.getCurrent().equals(current))
+		{
+			((EditText)findViewById(R.id.editTextInput)).setText("");
+			tg.moveNext();
+			setTextToView();
+			if(tg.isFinished())
+				handleFinish();
+		}
+	}
+
+	private void handleFinish() {
+		isRunning = false;
+        findStartButton().setEnabled(true);
+        long endTime = System.currentTimeMillis();
+		findTV(R.id.textViewResult).setText("Finish! total ch:" + tg.getTotalCharacterNum() + ", time=" + String.valueOf((int)(endTime - beginTime)/1000));	
+	}
+
+	private void handleStart() {
+		tg.reset();
+		setTextToView();
+		isRunning = true;
+		findStartButton().setEnabled(false);
+		beginTime = System.currentTimeMillis();
+		findTV(R.id.textViewResult).setText("");
 	}
 }

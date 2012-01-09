@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, OffTypingActivity!</string>
     <string name="app_name">OffTyping</string>
+    <string name="start_label">開始！</string>
+    <string name="explain_label">準備が出来たら開始ボタンを押して下さい。</string>
 
 </resources>
