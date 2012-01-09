@@ -1,0 +1,5 @@
+syntax: glob
+OffTyping/bin/
+OffTyping/gen/
+OffTypingTest/bin/
+OffTypingTest/gen/
