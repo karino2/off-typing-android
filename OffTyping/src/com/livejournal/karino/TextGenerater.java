@@ -6,7 +6,7 @@ import java.util.Random;
 public class TextGenerater {
 	ArrayList<String> texts;
 	int currentIndex;
-	int oneGameSize = 15;
+	int oneGameSize = 10;
 	public TextGenerater()
 	{
 		initializeTexts();
