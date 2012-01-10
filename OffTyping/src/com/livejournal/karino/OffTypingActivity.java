@@ -78,7 +78,7 @@ public class OffTypingActivity extends Activity {
         findStartButton().setEnabled(true);
         long endTime = System.currentTimeMillis();
         double minute = (endTime - beginTime)/(1000*60.0);
-		findTV(R.id.textViewResult).setText("•ª‘¬" +  (int)(tg.getTotalCharacterNum()/minute) + " •¶Žš ");
+		findTV(R.id.textViewResult).setText("åˆ†é€Ÿ" +  (int)(tg.getTotalCharacterNum()/minute) + " æ–‡å­—");
 	}
 
 	private void handleStart() {
