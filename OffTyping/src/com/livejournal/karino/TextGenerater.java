@@ -9,25 +9,40 @@ public class TextGenerater {
 	int oneGameSize = 10;
 	public TextGenerater()
 	{
-		initializeTexts();
+		initializeAsJapanese();
 		shuffle();
 		
 		currentIndex = 0;
 	}
-	private void initializeTexts() {
-		texts = new ArrayList<String>();
+	public void initializeAsEnglish() {
+		String[] arr = new String[]{
+				"Unix", "Linux", "UnitTest","Wikipedia",
+				"SharePoint", "Windows", "Mac OS","OpenCL", "Android", 
+				"eclipse", "Java", "FireAlpaca", "OffTyping",
+				"When I was young,", "This is old.",
+				"Are you ready?", "I'm lady.",
+				"It's show time!", "Go my way!!", "highway"
+		};
+		initializeTexts(arr);
+	}
+	public void initializeAsJapanese() {
 		String[] arr = new String[]{
 				"いまのところ","てきすとは","はーどこーど","ございます。",
-				"ごぎょう", "はこべら", "ほとけのざ", "なずな", "すずな", "すずしろ", "せり",
+				"つづく。", "つづきはまたあした","したづつみをうつ",
+				"ごぎょう", "はこべら", "ほとけのざ", "なずな", "すずな", "すずしろ", "かふんしょう",
 				"このごろは、", "だいぶ", "あたたかくなってきました。", "ふりっくにゅうりょく", "はやぶさくん", "がんばって", "れんしゅうします。",
 				"けいたいでんわ", "りょうてでふりっく", "それなりにはやい", "あんどろいど",
-				"しょうかん", "たいかん", "りっしゅん", "うすい", "けいちつ", "しゅんぶん","せいめい","げし",
+				"しょうかん", "たいかん", "りっしゅん", "うすい", "けいちつ", "しゅんぶん","ねんまつねんし","おつかれさまでした。",
 				"なーんだ", "ただの", "みずたまり", "じゃないか",
 				"べんきょう", "するのが", "そんなに", "えらいわけ？",
 				"こんどの", "しんきしゅ", "たのしみです。", 
 				"もうすこし", "しんばんぐみ" 
 				
 		};
+		initializeTexts(arr);
+	}
+	void initializeTexts(String[] arr) {
+		texts = new ArrayList<String>();
 		for(String st : arr)
 		{
 			texts.add(st);

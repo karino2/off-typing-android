@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class OffTypingActivity extends Activity {
@@ -43,6 +45,18 @@ public class OffTypingActivity extends Activity {
 				handleStart();
 			}});
         
+        RadioGroup rg = (RadioGroup)findViewById(R.id.radioLaunguageGroup);
+        rg.check(R.id.radioJapanese);
+        rg.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if(checkedId == R.id.radioJapanese) {
+					tg.initializeAsJapanese();
+				} else if(checkedId == R.id.radioEnglish) {
+					tg.initializeAsEnglish();
+				}
+				
+			}});
         
     }
 
