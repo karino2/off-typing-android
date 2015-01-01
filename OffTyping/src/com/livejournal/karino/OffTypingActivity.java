@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.TextKeyListener;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -79,7 +81,8 @@ public class OffTypingActivity extends Activity {
 		// findTV(R.id.textViewResult).setText(current);
 		if(tg.getCurrent().equals(current))
 		{
-			((EditText)findViewById(R.id.editTextInput)).setText("");
+            EditText et = ((EditText)findViewById(R.id.editTextInput));
+            TextKeyListener.clear(et.getText());
 			tg.moveNext();
 			setTextToView();
 			if(tg.isFinished())
