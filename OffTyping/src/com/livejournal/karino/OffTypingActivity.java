@@ -83,6 +83,7 @@ public class OffTypingActivity extends Activity {
 		{
             EditText et = ((EditText)findViewById(R.id.editTextInput));
             TextKeyListener.clear(et.getText());
+            et.setText("");
 			tg.moveNext();
 			setTextToView();
 			if(tg.isFinished())
