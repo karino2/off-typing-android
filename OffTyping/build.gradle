@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.livejournal.karino"
+        minSdkVersion 7
+        targetSdkVersion 23
+        versionCode 3
+        versionName "0.3"
+    }
+
+    sourceSets {
+        main {
+            // TODO: These should be moved to src/main
+            manifest.srcFile 'AndroidManifest.xml'
+            res.srcDirs = ['res']
+            java.srcDirs = ['src']
+        }
+    }
+    signingConfigs {
+        release {
+// @karino2: Uncomment if you're comfortable with this scheme.
+//            def privateProps = new Properties()
+//            privateProps.load(project.rootProject.file('private.properties').newDataInputStream())
+//
+//            storePassword privateProps.getProperty("sign.storePassword")
+//            storeFile file(privateProps.getProperty("sign.storeFile"))
+//            keyAlias privateProps.getProperty("sign.keyAlias")
+//            keyPassword privateProps.getProperty("sign.keyPassword")
+        }
+    }
+
+    buildTypes {
+        release {
+            apply plugin: 'findbugs'
+            //signingConfig signingConfigs.release
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
