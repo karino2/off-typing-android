@@ -14,14 +14,6 @@ android {
 
     signingConfigs {
         release {
-// @karino2: Uncomment if you're comfortable with this scheme.
-//            def privateProps = new Properties()
-//            privateProps.load(project.rootProject.file('private.properties').newDataInputStream())
-//
-//            storePassword privateProps.getProperty("sign.storePassword")
-//            storeFile file(privateProps.getProperty("sign.storeFile"))
-//            keyAlias privateProps.getProperty("sign.keyAlias")
-//            keyPassword privateProps.getProperty("sign.keyPassword")
         }
     }
 
