@@ -12,14 +12,6 @@ android {
         versionName "0.3"
     }
 
-    sourceSets {
-        main {
-            // TODO: These should be moved to src/main
-            manifest.srcFile 'AndroidManifest.xml'
-            res.srcDirs = ['res']
-            java.srcDirs = ['src']
-        }
-    }
     signingConfigs {
         release {
 // @karino2: Uncomment if you're comfortable with this scheme.
