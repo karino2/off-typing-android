@@ -17,7 +17,10 @@ import android.widget.TextView;
 public class OffTypingActivity extends Activity {
 	
 	TextGenerater tg;
+	TextTracker tracker = new TextTracker("");
+
 	long beginTime;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,23 +45,24 @@ public class OffTypingActivity extends Activity {
 			}});
         
         
-        findStartButton().setOnClickListener(new OnClickListener(){
+        findStartButton().setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				handleStart();
 			}});
         
         RadioGroup rg = (RadioGroup)findViewById(R.id.radioLaunguageGroup);
         rg.check(R.id.radioJapanese);
-        rg.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+        rg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				if(checkedId == R.id.radioJapanese) {
+				if (checkedId == R.id.radioJapanese) {
 					tg.initializeAsJapanese();
-				} else if(checkedId == R.id.radioEnglish) {
+				} else if (checkedId == R.id.radioEnglish) {
 					tg.initializeAsEnglish();
 				}
-				
-			}});
+
+			}
+		});
         
     }
 
@@ -78,13 +82,15 @@ public class OffTypingActivity extends Activity {
 	}
 
 	private void handleInput(String current) {
-		// findTV(R.id.textViewResult).setText(current);
-		if(tg.getCurrent().equals(current))
+		TextTracker.TypeResult result = tracker.reportTypedText(current);
+		if (result.equals(TextTracker.TypeResult.DONE))
 		{
             EditText et = ((EditText)findViewById(R.id.editTextInput));
             TextKeyListener.clear(et.getText());
             et.setText("");
 			tg.moveNext();
+			tracker = new TextTracker(tg.getCurrent());
+
 			setTextToView();
 			if(tg.isFinished())
 				handleFinish();
@@ -106,5 +112,6 @@ public class OffTypingActivity extends Activity {
 		findStartButton().setEnabled(false);
 		beginTime = System.currentTimeMillis();
 		findTV(R.id.textViewResult).setText("");
+		tracker = new TextTracker(tg.getCurrent());
 	}
 }
