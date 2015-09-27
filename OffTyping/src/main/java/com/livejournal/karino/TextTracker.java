@@ -61,4 +61,8 @@ public class TextTracker {
     public int getMisstypingCount() {
         return misstypingCount;
     }
+
+    public boolean hadMisstyping() {
+        return 0 < misstypingCount;
+    }
 }

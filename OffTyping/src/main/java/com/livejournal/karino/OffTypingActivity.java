@@ -1,11 +1,12 @@
 package com.livejournal.karino;
 
+import android.animation.ArgbEvaluator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,14 +20,23 @@ public class OffTypingActivity extends Activity {
 	TextGenerater tg;
 	TextTracker tracker = new TextTracker("");
 
+	final private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+	int originalTextColor;
+	int cautiousTextColor;
+	int failedTextColor;
+	int numMisstypings;
+
 	long beginTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        tg = new TextGenerater();
+		originalTextColor = findTV(R.id.textViewNext).getTextColors().getDefaultColor();
+		cautiousTextColor = (Integer)(argbEvaluator.evaluate(0.2f, originalTextColor, Color.RED));
+		failedTextColor = (Integer)(argbEvaluator.evaluate(0.8f, originalTextColor, Color.RED));
+
+		tg = new TextGenerater();
         
         EditText et = (EditText)findViewById(R.id.editTextInput);
         et.addTextChangedListener(new TextWatcher(){
@@ -83,27 +93,79 @@ public class OffTypingActivity extends Activity {
 
 	private void handleInput(String current) {
 		TextTracker.TypeResult result = tracker.reportTypedText(current);
-		if (result.equals(TextTracker.TypeResult.DONE))
-		{
-            EditText et = ((EditText)findViewById(R.id.editTextInput));
-            TextKeyListener.clear(et.getText());
-            et.setText("");
+
+		// Doing post() because setting color immediately here occasionally froze my IME
+		// for some reason :-(
+		switch (result) {
+			case DONE:
+				getWindow().getDecorView().post(doHandleSentenceTyped);
+				break;
+			case MISSTYPING:
+				getWindow().getDecorView().post(doHandleBadTyping);
+				break;
+			case PENDING:
+				getWindow().getDecorView().post(doHandleCautiousTyping);
+				break;
+			case DOING_WELL:
+				getWindow().getDecorView().post(doHandleGoodTyping);
+				break;
+		}
+	}
+
+	private final Runnable doHandleSentenceTyped = new Runnable() {
+		@Override
+		public void run() {
+
 			tg.moveNext();
+			numMisstypings += tracker.getMisstypingCount();
 			tracker = new TextTracker(tg.getCurrent());
 
+			TextView currentText = findTV(R.id.textViewCurrent);
+			currentText.setTextColor(originalTextColor);
+
+			EditText et = ((EditText)findViewById(R.id.editTextInput));
+			TextKeyListener.clear(et.getText());
+			et.setText("");
 			setTextToView();
 			if(tg.isFinished())
 				handleFinish();
 		}
+	};
+
+	private final Runnable doHandleGoodTyping = new Runnable() {
+		@Override
+		public void run() {
+			findTV(R.id.textViewCurrent).setTextColor(originalTextColor);
+		}
+	};
+
+	private final Runnable doHandleCautiousTyping = new Runnable() {
+		@Override
+		public void run() {
+			findTV(R.id.textViewCurrent).setTextColor(cautiousTextColor);
+		}
+	};
+
+	private final Runnable doHandleBadTyping = new Runnable() {
+		@Override
+		public void run() {
+			findTV(R.id.textViewCurrent).setTextColor(failedTextColor);
+		}
+	};
+
+	private String buildFinishMessage() {
+		long endTime = System.currentTimeMillis();
+		double minute = (endTime - beginTime)/(1000*60.0);
+		int velocity = (int)(tg.getTotalCharacterNum()/minute);
+		return String.format("分速%d文字(%d 誤入力)", velocity, numMisstypings);
 	}
 
 	private void handleFinish() {
 		isRunning = false;
         findStartButton().setEnabled(true);
-        long endTime = System.currentTimeMillis();
-        double minute = (endTime - beginTime)/(1000*60.0);
-		findTV(R.id.textViewResult).setText("分速" +  (int)(tg.getTotalCharacterNum()/minute) + " 文字");
+		findTV(R.id.textViewResult).setText(buildFinishMessage());
 	}
+
 
 	private void handleStart() {
 		tg.reset();
@@ -112,6 +174,7 @@ public class OffTypingActivity extends Activity {
 		findStartButton().setEnabled(false);
 		beginTime = System.currentTimeMillis();
 		findTV(R.id.textViewResult).setText("");
+		numMisstypings = 0;
 		tracker = new TextTracker(tg.getCurrent());
 	}
 }
