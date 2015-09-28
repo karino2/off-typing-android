@@ -12,15 +12,9 @@ android {
         versionName "0.3"
     }
 
-    signingConfigs {
-        release {
-        }
-    }
-
     buildTypes {
         release {
             apply plugin: 'findbugs'
-            //signingConfig signingConfigs.release
         }
 
         debug {
