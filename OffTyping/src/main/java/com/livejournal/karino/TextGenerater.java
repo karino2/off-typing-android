@@ -7,6 +7,8 @@ public class TextGenerater {
 	ArrayList<String> texts;
 	int currentIndex;
 	int oneGameSize = 10;
+	boolean retryInserted = false;
+
 	public TextGenerater()
 	{
 		initializeAsJapanese();
@@ -95,6 +97,7 @@ public class TextGenerater {
 	{
 		shuffle();
 		currentIndex = 0;
+		retryInserted = false;
 	}
 	
 	public int getTotalCharacterNum()
@@ -109,10 +112,27 @@ public class TextGenerater {
 	
 	public void moveNext()
 	{
-		if(!isFinished())
-			currentIndex++;
+		if(isFinished())
+			return;
+		currentIndex++;
+		retryInserted = false;
 	}
-	
+
+	public void insertRetry() {
+		if (retryInserted)
+			return;
+
+		if (currentIndex + 2 <= oneGameSize) {
+			texts.add(currentIndex + 2, getCurrent());
+		} else {
+			texts.add(currentIndex + 1, getCurrent());
+		}
+
+		oneGameSize++;
+		retryInserted = true;
+	}
+
+	public boolean canRetry() { return !retryInserted; }
 	public boolean isFinished()
 	{
 		return currentIndex >= oneGameSize;
