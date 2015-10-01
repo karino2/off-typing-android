@@ -56,9 +56,9 @@ public class TextGeneraterTest {
 		int initialGameSize = 3;
 		tg.oneGameSize = initialGameSize;
 		tg.initializeAsJapanese();
-		String toBeReetried = tg.getCurrent();
+		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
-		Assert.assertEquals(toBeReetried, tg.getAfterNext());
+		Assert.assertEquals(toBeRetried, tg.getAfterNext());
 		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
 	}
 
@@ -79,9 +79,9 @@ public class TextGeneraterTest {
 		int initialGameSize = 2;
 		tg.oneGameSize = initialGameSize;
 		tg.initializeAsJapanese();
-		String toBeReetried = tg.getCurrent();
+		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
-		Assert.assertEquals(toBeReetried, tg.getAfterNext());
+		Assert.assertEquals(toBeRetried, tg.getAfterNext());
 		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
 	}
 
@@ -90,9 +90,9 @@ public class TextGeneraterTest {
 		int initialGameSize = 1;
 		tg.oneGameSize = initialGameSize;
 		tg.initializeAsJapanese();
-		String toBeReetried = tg.getCurrent();
+		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
-		Assert.assertEquals(toBeReetried, tg.getNext());
+		Assert.assertEquals(toBeRetried, tg.getNext());
 		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
 	}
 }
