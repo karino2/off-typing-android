@@ -135,6 +135,7 @@ public class OffTypingActivity extends Activity {
 	private final Runnable doHandleGoodTyping = new Runnable() {
 		@Override
 		public void run() {
+			insertRetryIfNeeded();
 			findTV(R.id.textViewCurrent).setTextColor(originalTextColor);
 		}
 	};
@@ -142,6 +143,7 @@ public class OffTypingActivity extends Activity {
 	private final Runnable doHandleCautiousTyping = new Runnable() {
 		@Override
 		public void run() {
+			insertRetryIfNeeded();
 			findTV(R.id.textViewCurrent).setTextColor(cautiousTextColor);
 		}
 	};
@@ -149,9 +151,17 @@ public class OffTypingActivity extends Activity {
 	private final Runnable doHandleBadTyping = new Runnable() {
 		@Override
 		public void run() {
+			insertRetryIfNeeded();
 			findTV(R.id.textViewCurrent).setTextColor(failedTextColor);
 		}
 	};
+
+	private void insertRetryIfNeeded() {
+		if (tracker.hadMisstyping() && tg.canRetry()) {
+			tg.insertRetry();
+			setTextToView();
+		}
+	}
 
 	private String buildFinishMessage() {
 		long endTime = System.currentTimeMillis();

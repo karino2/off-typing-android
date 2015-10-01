@@ -1,5 +1,7 @@
 package com.livejournal.karino;
 
+import junit.framework.Assert;
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -47,7 +49,50 @@ public class TextGeneraterTest {
 			tg.moveNext();
 		}
 		assertTrue(tg.isFinished());
-	}	
+	}
 
+	@Test
+	public void testInsertRetryAtAfterNext() {
+		int initialGameSize = 3;
+		tg.oneGameSize = initialGameSize;
+		tg.initializeAsJapanese();
+		String toBeReetried = tg.getCurrent();
+		tg.insertRetry();
+		Assert.assertEquals(toBeReetried, tg.getAfterNext());
+		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+	}
 
+	@Test
+	public void testInsertNewRetryOnlyAfterMove() {
+		int initialGameSize = 3;
+		tg.oneGameSize = initialGameSize;
+		tg.initializeAsJapanese();
+		assertTrue(tg.canRetry());
+		tg.insertRetry();
+		assertFalse(tg.canRetry());
+		tg.moveNext();
+		assertTrue(tg.canRetry());
+	}
+
+	@Test
+	public void testInsertRetryAtAfterNextAsLast() {
+		int initialGameSize = 2;
+		tg.oneGameSize = initialGameSize;
+		tg.initializeAsJapanese();
+		String toBeReetried = tg.getCurrent();
+		tg.insertRetry();
+		Assert.assertEquals(toBeReetried, tg.getAfterNext());
+		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+	}
+
+	@Test
+	public void testInsertRetryAtNext() {
+		int initialGameSize = 1;
+		tg.oneGameSize = initialGameSize;
+		tg.initializeAsJapanese();
+		String toBeReetried = tg.getCurrent();
+		tg.insertRetry();
+		Assert.assertEquals(toBeReetried, tg.getNext());
+		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+	}
 }
