@@ -7,15 +7,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class TextGeneraterTest {
-	TextGenerater tg = new TextGenerater();
 
 	@Test
 	public void testGetCurrent_MultipleCall_shouldReturnSame() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		assertEquals(tg.getCurrent(), tg.getCurrent());
 	}
 	
 	@Test
 	public void testGetCurrent_moveNext_makeGetCurrentDifferenct() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		String firstCur = tg.getCurrent();
 		tg.moveNext();
 		assertNotSame(firstCur, tg.getCurrent());
@@ -23,26 +24,31 @@ public class TextGeneraterTest {
 	
 	@Test
 	public void testGetCurrent_getNext_shouldBeDifferent() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		assertNotSame(tg.getCurrent(), tg.getNext());
 	}	
 
 	@Test
 	public void testGetCurrent_getAfterNext_shouldBeDifferent() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		assertNotSame(tg.getCurrent(), tg.getAfterNext());
 	}	
 
 	@Test
 	public void testGetNext_getAfterNext_shouldBeDifferent() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		assertNotSame(tg.getNext(), tg.getAfterNext());
 	}	
 	
 	@Test
 	public void testIsFinished_initiallyShouldFalse() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		assertFalse(tg.isFinished());
 	}
 	
 	@Test
 	public void testIsFinished_shouldReturnTrueWhenAllTextDone() {
+		TextGenerater tg = TextGenerater.createForJapanese();
 		int size = tg.oneGameSize;
 		for(int i = 0; i < size; i++) {
 			assertFalse(tg.isFinished());
@@ -54,8 +60,7 @@ public class TextGeneraterTest {
 	@Test
 	public void testInsertRetryAtAfterNext() {
 		int initialGameSize = 3;
-		tg.oneGameSize = initialGameSize;
-		tg.initializeAsJapanese();
+		TextGenerater tg = TextGenerater.createForJapanese(initialGameSize);
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getAfterNext());
@@ -65,8 +70,7 @@ public class TextGeneraterTest {
 	@Test
 	public void testInsertNewRetryOnlyAfterMove() {
 		int initialGameSize = 3;
-		tg.oneGameSize = initialGameSize;
-		tg.initializeAsJapanese();
+		TextGenerater tg = TextGenerater.createForJapanese(initialGameSize);
 		assertTrue(tg.canRetry());
 		tg.insertRetry();
 		assertFalse(tg.canRetry());
@@ -77,8 +81,7 @@ public class TextGeneraterTest {
 	@Test
 	public void testInsertRetryAtAfterNextAsLast() {
 		int initialGameSize = 2;
-		tg.oneGameSize = initialGameSize;
-		tg.initializeAsJapanese();
+		TextGenerater tg = TextGenerater.createForJapanese(initialGameSize);
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getAfterNext());
@@ -88,8 +91,7 @@ public class TextGeneraterTest {
 	@Test
 	public void testInsertRetryAtNext() {
 		int initialGameSize = 1;
-		tg.oneGameSize = initialGameSize;
-		tg.initializeAsJapanese();
+		TextGenerater tg = TextGenerater.createForJapanese(initialGameSize);
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getNext());

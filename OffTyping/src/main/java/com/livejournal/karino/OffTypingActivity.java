@@ -16,7 +16,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class OffTypingActivity extends Activity {
-	
+
+	TextGenerater.PhraseList selectedPhraseList = TextGenerater.JAPANESE_PHRASES;
 	TextGenerater tg;
 	TextTracker tracker = new TextTracker("");
 
@@ -36,7 +37,7 @@ public class OffTypingActivity extends Activity {
 		cautiousTextColor = (Integer)(argbEvaluator.evaluate(0.2f, originalTextColor, Color.RED));
 		failedTextColor = (Integer)(argbEvaluator.evaluate(0.8f, originalTextColor, Color.RED));
 
-		tg = new TextGenerater();
+		tg = new TextGenerater(selectedPhraseList);
         
         EditText et = (EditText)findViewById(R.id.editTextInput);
         et.addTextChangedListener(new TextWatcher(){
@@ -66,9 +67,9 @@ public class OffTypingActivity extends Activity {
 
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				if (checkedId == R.id.radioJapanese) {
-					tg.initializeAsJapanese();
+					selectedPhraseList = TextGenerater.JAPANESE_PHRASES;
 				} else if (checkedId == R.id.radioEnglish) {
-					tg.initializeAsEnglish();
+					selectedPhraseList = TextGenerater.ENGLISH_PHRASES;
 				}
 
 			}
@@ -178,7 +179,7 @@ public class OffTypingActivity extends Activity {
 
 
 	private void handleStart() {
-		tg.reset();
+		tg = new TextGenerater(selectedPhraseList);
 		setTextToView();
 		isRunning = true;
 		findStartButton().setEnabled(false);
