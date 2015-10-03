@@ -16,6 +16,12 @@ public class TextGenerater {
 		public ArrayList<String> toList() {
 			return new ArrayList<>(Arrays.asList(arrray));
 		}
+
+		public ArrayList<String> toShuffledSublist(int size) {
+			ArrayList shuffled = toList();
+			Collections.shuffle(shuffled, new Random());
+			return new ArrayList<>(shuffled.subList(0, size));
+		}
 	}
 
 	public static final PhraseList ENGLISH_PHRASES = new PhraseList(new String[]{
@@ -51,15 +57,12 @@ public class TextGenerater {
 
 	final ArrayList<String> texts;
 	int currentIndex;
-	int oneGameSize;
 	boolean retryInserted = false;
 
 	private TextGenerater(PhraseList phrases, int gameSize)
 	{
 		currentIndex = 0;
-		oneGameSize = gameSize;
-		texts = phrases.toList();
-		Collections.shuffle(texts, new Random());
+		texts = phrases.toShuffledSublist(gameSize);
 	}
 
 	public TextGenerater(PhraseList phrases) {
@@ -93,15 +96,19 @@ public class TextGenerater {
 	
 	public String getAt(int i)
 	{
-		if(i < oneGameSize)
+		if(i < texts.size())
 			return texts.get(i);
 		return "";
+	}
+
+	public int getGameSize() {
+		return texts.size();
 	}
 
 	public int getTotalCharacterNum()
 	{
 		int sum = 0;
-		for(int i = 0; i < oneGameSize; i++){
+		for(int i = 0; i < texts.size(); i++){
 			String st = texts.get(i);
 			sum += st.length();
 		}
@@ -120,19 +127,20 @@ public class TextGenerater {
 		if (retryInserted)
 			return;
 
-		if (currentIndex + 2 <= oneGameSize) {
+		if (currentIndex + 2 <= texts.size()) {
 			texts.add(currentIndex + 2, getCurrent());
 		} else {
 			texts.add(currentIndex + 1, getCurrent());
 		}
 
-		oneGameSize++;
 		retryInserted = true;
 	}
 
-	public boolean canRetry() { return !retryInserted; }
-	public boolean isFinished()
-	{
-		return currentIndex >= oneGameSize;
+	public boolean canRetry() {
+		return !retryInserted;
+	}
+
+	public boolean isFinished()  {
+		return currentIndex >= texts.size();
 	}
 }

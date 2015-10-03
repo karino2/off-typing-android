@@ -49,7 +49,7 @@ public class TextGeneraterTest {
 	@Test
 	public void testIsFinished_shouldReturnTrueWhenAllTextDone() {
 		TextGenerater tg = TextGenerater.createForJapanese();
-		int size = tg.oneGameSize;
+		int size = tg.getGameSize();
 		for(int i = 0; i < size; i++) {
 			assertFalse(tg.isFinished());
 			tg.moveNext();
@@ -64,7 +64,7 @@ public class TextGeneraterTest {
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getAfterNext());
-		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+		Assert.assertEquals(initialGameSize + 1, tg.getGameSize());
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class TextGeneraterTest {
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getAfterNext());
-		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+		Assert.assertEquals(initialGameSize + 1, tg.getGameSize());
 	}
 
 	@Test
@@ -95,6 +95,6 @@ public class TextGeneraterTest {
 		String toBeRetried = tg.getCurrent();
 		tg.insertRetry();
 		Assert.assertEquals(toBeRetried, tg.getNext());
-		Assert.assertEquals(initialGameSize + 1, tg.oneGameSize);
+		Assert.assertEquals(initialGameSize + 1, tg.getGameSize());
 	}
 }
