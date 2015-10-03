@@ -3,7 +3,9 @@ package com.livejournal.karino;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class TextGenerater {
 	static public class PhraseList {
@@ -21,6 +23,14 @@ public class TextGenerater {
 			ArrayList shuffled = toList();
 			Collections.shuffle(shuffled, new Random());
 			return new ArrayList<>(shuffled.subList(0, size));
+		}
+
+		public ArrayList<String> toShuffledSublistWith(int originalSize, Set<String> additions) {
+			// This allows duplication of the same entry.
+			ArrayList result = toShuffledSublist(originalSize);
+			result.addAll(additions);
+			Collections.shuffle(result);
+			return result;
 		}
 	}
 
@@ -55,18 +65,23 @@ public class TextGenerater {
 
 	private static final int DEFAULT_GAME_SIZE = 10;
 
+	final Set<String> retriedPhrases = new HashSet<>();
 	final ArrayList<String> texts;
 	int currentIndex;
 	boolean retryInserted = false;
 
-	private TextGenerater(PhraseList phrases, int gameSize)
+	public TextGenerater(PhraseList phrases, int gameSize, Set<String> required)
 	{
 		currentIndex = 0;
-		texts = phrases.toShuffledSublist(gameSize);
+		texts = phrases.toShuffledSublistWith(gameSize - required.size(), required);
+	}
+
+	public TextGenerater(PhraseList phrases, Set<String> required) {
+		this(phrases, DEFAULT_GAME_SIZE, required);
 	}
 
 	public TextGenerater(PhraseList phrases) {
-		this(phrases, DEFAULT_GAME_SIZE);
+		this(phrases, DEFAULT_GAME_SIZE, Collections.<String>emptySet());
 	}
 
 	// These are for testing.
@@ -76,7 +91,7 @@ public class TextGenerater {
 	}
 
 	public static TextGenerater createForJapanese(int gameSize) {
-		return new TextGenerater(JAPANESE_PHRASES, gameSize);
+		return new TextGenerater(JAPANESE_PHRASES, gameSize, Collections.<String>emptySet());
 	}
 
 	public String getCurrent()
@@ -126,14 +141,11 @@ public class TextGenerater {
 	public void insertRetry() {
 		if (retryInserted)
 			return;
-
-		if (currentIndex + 2 <= texts.size()) {
-			texts.add(currentIndex + 2, getCurrent());
-		} else {
-			texts.add(currentIndex + 1, getCurrent());
-		}
-
 		retryInserted = true;
+
+		int retryIndex = currentIndex + 2 <= texts.size() ? currentIndex + 2 : currentIndex + 1;
+		texts.add(retryIndex, getCurrent());
+		retriedPhrases.add(getCurrent());
 	}
 
 	public boolean canRetry() {

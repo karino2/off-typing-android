@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.HashSet;
+
 public class TextGeneraterTest {
 
 	@Test
@@ -97,4 +99,31 @@ public class TextGeneraterTest {
 		Assert.assertEquals(toBeRetried, tg.getNext());
 		Assert.assertEquals(initialGameSize + 1, tg.getGameSize());
 	}
+
+	@Test
+	public void testRetriedPhrasedsAreRecorded() {
+		TextGenerater tg = TextGenerater.createForJapanese();
+		tg.insertRetry();
+		assertEquals(tg.retriedPhrases.size(), 1);
+		tg.insertRetry();
+		assertEquals(tg.retriedPhrases.size(), 1);
+		tg.moveNext();
+		tg.insertRetry();
+		assertEquals(tg.retriedPhrases.size(), 2);
+	}
+
+	@Test
+	public void testRequiredPhrasesAppear() {
+		String required0 = "foo";
+		String required1 = "bar";
+		int gameSize = 10;
+		HashSet<String> required = new HashSet<>();
+		required.add(required0);
+		required.add(required1);
+		TextGenerater tg = new TextGenerater(TextGenerater.JAPANESE_PHRASES, gameSize, required);
+		assertTrue(tg.texts.contains(required0));
+		assertTrue(tg.texts.contains(required1));
+		assertEquals(tg.getGameSize(), gameSize);
+	}
+
 }

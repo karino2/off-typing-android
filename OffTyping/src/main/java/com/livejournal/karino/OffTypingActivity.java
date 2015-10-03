@@ -179,7 +179,7 @@ public class OffTypingActivity extends Activity {
 
 
 	private void handleStart() {
-		tg = new TextGenerater(selectedPhraseList);
+		tg = new TextGenerater(selectedPhraseList, tg.retriedPhrases);
 		setTextToView();
 		isRunning = true;
 		findStartButton().setEnabled(false);
