@@ -70,14 +70,14 @@ public class TextGenerater {
 	int currentIndex;
 	boolean retryInserted = false;
 
-	public TextGenerater(PhraseList phrases, int gameSize, Set<String> required)
+	public TextGenerater(PhraseList phrases, int gameSize, Set<String> additional)
 	{
 		currentIndex = 0;
-		texts = phrases.toShuffledSublistWith(gameSize - required.size(), required);
+		texts = phrases.toShuffledSublistWith(gameSize - additional.size(), additional);
 	}
 
-	public TextGenerater(PhraseList phrases, Set<String> required) {
-		this(phrases, DEFAULT_GAME_SIZE, required);
+	public TextGenerater(PhraseList phrases, Set<String> additional) {
+		this(phrases, DEFAULT_GAME_SIZE, additional);
 	}
 
 	public TextGenerater(PhraseList phrases) {
